@@ -1,7 +1,7 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import Post from './src/app/modals/Post.modal.js';
+const express = require('express');
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
+const router = require('./src/routers/posts.router');
 
 dotenv.config();
 
@@ -11,30 +11,10 @@ const DB_URL = process.env.DB_URL;
 
 app.use(express.json());
 
-// main
+app.use('/api', router);
+
 app.get('/', (req, res) => {
     res.status(200).json('Server working..');
-});
-
-// posts
-app.post('/posts', async (req, res) => {
-    try {
-        const {author, title, content, picture} = req.body;
-        const post = await Post.create({
-            author,
-            title,
-            content,
-            picture,
-        });
-
-        res.json(post);
-    } catch (e) {
-        res.status(500).json(e);
-    }
-});
-
-app.get('/posts', async (req, res) => {
-    res.status(200).json();
 });
 
 async function startApp() {
